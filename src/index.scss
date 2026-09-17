@@ -1,0 +1,30 @@
+:root {
+  --color-bg: #0f1419;
+  --color-bg-alt: #1a2332;
+  --color-surface: #1e2a3a;
+  --color-border: #2d3a4d;
+  --color-text: #e6edf3;
+  --color-muted: #8b949e;
+  --color-accent: #0070d2;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont,
+    sans-serif;
+  line-height: 1.5;
+  color: var(--color-text);
+  background: var(--color-bg);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  min-height: 100vh;
+}
