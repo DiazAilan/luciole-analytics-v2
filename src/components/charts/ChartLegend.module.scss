@@ -1,0 +1,47 @@
+@use '../../styles/ds-spacing' as spacing;
+
+.legend {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$positive-spacing_100;
+  flex: 1;
+  min-width: 180px;
+}
+
+.inline {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: spacing.$positive-spacing_200;
+  min-width: 0;
+}
+
+.legendItem {
+  display: flex;
+  align-items: center;
+  gap: spacing.$positive-spacing_100;
+  font-size: 0.875rem;
+}
+
+.dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.name {
+  flex: 1;
+  color: var(--content-primary);
+}
+
+.inline .name {
+  flex: 0 1 auto;
+}
+
+.percent {
+  color: var(--content-tertiary);
+  font-weight: 600;
+}

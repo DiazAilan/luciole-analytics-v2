@@ -1,3 +1,4 @@
+import { Card, Grid } from '@design-system-rte/react';
 import type { AnalyticsData } from '../types';
 import styles from './SummaryCards.module.scss';
 
@@ -10,6 +11,17 @@ function formatReleaseLabel(iso: string, releaseStats: AnalyticsData['releaseSta
   return match?.releaseLabel ?? iso;
 }
 
+function StatCard({ value, label }: { value: string | number; label: string }) {
+  return (
+    <Card width="100%">
+      <div className={styles.cardContent}>
+        <span className={styles.value}>{value}</span>
+        <span className={styles.label}>{label}</span>
+      </div>
+    </Card>
+  );
+}
+
 export function SummaryCards({ data }: SummaryCardsProps) {
   const avgPerRelease =
     data.releaseStats.length > 0
@@ -19,28 +31,20 @@ export function SummaryCards({ data }: SummaryCardsProps) {
   const minLabel = formatReleaseLabel(data.releaseRange.min, data.releaseStats);
   const maxLabel = formatReleaseLabel(data.releaseRange.max, data.releaseStats);
 
+  const stats = [
+    { value: data.totalTasks, label: 'Tâches totales' },
+    { value: data.releaseStats.length, label: 'Releases' },
+    { value: avgPerRelease, label: 'Moy. par release' },
+    { value: `${minLabel} – ${maxLabel}`, label: 'Période releases', size: {l: 3} },
+  ];
+
   return (
-    <div className={styles.cards}>
-      <div className={styles.card}>
-        <span className={styles.value}>{data.totalTasks}</span>
-        <span className={styles.label}>Tâches totales</span>
-      </div>
-      <div className={styles.card}>
-        <span className={styles.value}>{data.releaseStats.length}</span>
-        <span className={styles.label}>Releases</span>
-      </div>
-      <div className={styles.card}>
-        <span className={styles.value}>{data.categoryStats.length}</span>
-        <span className={styles.label}>Catégories</span>
-      </div>
-      <div className={styles.card}>
-        <span className={styles.value}>{avgPerRelease}</span>
-        <span className={styles.label}>Moy. par release</span>
-      </div>
-      <div className={styles.card}>
-        <span className={styles.value}>{minLabel} – {maxLabel}</span>
-        <span className={styles.label}>Période releases</span>
-      </div>
-    </div>
+    <Grid gridType="fluid">
+      {stats.map((stat) => (
+        <Grid.Col key={stat.label} xxs={12} xs={6} m={4} l={stat.size?.l ?? 3} className={styles.col}>
+          <StatCard value={stat.value} label={stat.label} />
+        </Grid.Col>
+      ))}
+    </Grid>
   );
 }

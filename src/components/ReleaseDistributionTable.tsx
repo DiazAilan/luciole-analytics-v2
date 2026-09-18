@@ -1,8 +1,8 @@
 import type { AnalyticsData } from '../types';
-import { MAIN_CATEGORIES_ORDER } from '../constants/categories';
+import { MAIN_CATEGORIES_ORDER, getMainCategoryColor } from '../constants/categories';
+import { ChartCard } from './charts/ChartCard';
+import { ChartLegend } from './charts/ChartLegend';
 import styles from './ReleaseDistributionTable.module.scss';
-
-const CATEGORY_COLORS = ['#4a90d9', '#e06c4a', '#2ecc71', '#9b59b6'];
 
 type RowData = { release: string; releaseLabel: string } & Record<string, number | string>;
 
@@ -29,28 +29,15 @@ export function ReleaseDistributionTable({ data }: { data: AnalyticsData }) {
   );
 
   const totalGeneral = Object.values(totals).reduce((a, b) => a + b, 0);
-  const releaseCount = data.releaseStats.length;
-  const avgPerCategory = mainCategories.reduce(
-    (acc, cat) => {
-      acc[cat] = releaseCount > 0 ? (totals[cat] / releaseCount).toFixed(1) : '0';
-      return acc;
-    },
-    {} as Record<string, string>
-  );
+
+  const legendItems = mainCategories.map((cat) => ({
+    name: cat,
+    color: getMainCategoryColor(cat),
+  }));
 
   return (
-    <section className={styles.card}>
-      <h2 className={styles.title}>
-        Charge par release — Composant, Devops / Architecture, MCO et Documentation
-      </h2>
-      <div className={styles.legend}>
-        {mainCategories.map((cat, i) => (
-          <span key={cat} className={styles.legendItem}>
-            <span className={styles.dot} style={{ background: CATEGORY_COLORS[i] }} />
-            {cat}
-          </span>
-        ))}
-      </div>
+    <ChartCard title="Charge par release — Composant, Devops / Architecture, MCO et Documentation">
+      <ChartLegend items={legendItems} layout="inline" />
       <div className={styles.tableWrapper}>
         <table className={styles.table}>
           <thead>
@@ -65,10 +52,10 @@ export function ReleaseDistributionTable({ data }: { data: AnalyticsData }) {
                 (s, c) => s + ((row[c] as number) ?? 0),
                 0
               );
-              const segments = mainCategories.map((cat, i) => {
+              const segments = mainCategories.map((cat) => {
                 const val = (row[cat] as number) ?? 0;
                 const pct = rowTotal > 0 ? (val / rowTotal) * 100 : 0;
-                return { cat, val, pct, color: CATEGORY_COLORS[i] };
+                return { cat, val, pct, color: getMainCategoryColor(cat) };
               });
               return (
                 <tr key={row.release}>
@@ -102,23 +89,23 @@ export function ReleaseDistributionTable({ data }: { data: AnalyticsData }) {
               <td>
                 <div className={styles.barRow}>
                   <div className={styles.bar}>
-                    {mainCategories.map((cat, i) => {
+                    {mainCategories.map((cat) => {
                       const pct = totalGeneral > 0 ? (totals[cat] / totalGeneral) * 100 : 0;
                       return (
                         <div
                           key={cat}
                           className={styles.segment}
-                          style={{ width: `${pct}%`, background: CATEGORY_COLORS[i] }}
+                          style={{ width: `${pct}%`, background: getMainCategoryColor(cat) }}
                           title={`${cat}: ${totals[cat]}`}
                         />
                       );
                     })}
                   </div>
                   <div className={styles.percentages}>
-                    {mainCategories.map((cat, i) => {
+                    {mainCategories.map((cat) => {
                       const pct = totalGeneral > 0 ? (totals[cat] / totalGeneral) * 100 : 0;
                       return (
-                        <span key={cat} style={{ color: CATEGORY_COLORS[i] }}>
+                        <span key={cat} style={{ color: getMainCategoryColor(cat) }}>
                           {pct.toFixed(0)}%
                         </span>
                       );
@@ -130,17 +117,6 @@ export function ReleaseDistributionTable({ data }: { data: AnalyticsData }) {
           </tbody>
         </table>
       </div>
-      <div className={styles.footer}>
-        <span className={styles.footerLabel}>Moyenne par release</span>
-        <div className={styles.avgGrid}>
-          {mainCategories.map((cat) => (
-            <div key={cat} className={styles.avgItem}>
-              <span>{cat}</span>
-              <strong>{avgPerCategory[cat]}</strong>
-            </div>
-          ))}
-        </div>
-      </div>
-    </section>
+    </ChartCard>
   );
 }

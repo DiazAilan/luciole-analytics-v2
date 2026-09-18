@@ -1,7 +1,7 @@
-import { useCallback, useRef } from 'react';
+import { useCallback } from 'react';
+import { FileUpload } from '@design-system-rte/react';
 import type { ParseResult, TaskRow } from '../types';
 import { parseCSV } from '../utils/csvParser';
-import styles from './FileInput.module.scss';
 
 interface FileInputProps {
   onLoad: (tasks: TaskRow[], info: Omit<ParseResult, 'tasks'>) => void;
@@ -9,11 +9,9 @@ interface FileInputProps {
 }
 
 export function FileInput({ onLoad, onError }: FileInputProps) {
-  const inputRef = useRef<HTMLInputElement>(null);
-
-  const handleFile = useCallback(
-    (e: React.ChangeEvent<HTMLInputElement>) => {
-      const file = e.target.files?.[0];
+  const handleChange = useCallback(
+    (files: File[]) => {
+      const file = files[0];
       if (!file) return;
 
       if (!file.name.toLowerCase().endsWith('.csv')) {
@@ -41,31 +39,18 @@ export function FileInput({ onLoad, onError }: FileInputProps) {
       };
       reader.onerror = () => onError?.('Erreur lors de la lecture du fichier.');
       reader.readAsText(file, 'UTF-8');
-
-      if (inputRef.current) inputRef.current.value = '';
     },
     [onLoad, onError]
   );
 
-  const handleClick = () => inputRef.current?.click();
-
   return (
-    <div className={styles.wrapper}>
-      <input
-        ref={inputRef}
-        type="file"
-        accept=".csv"
-        onChange={handleFile}
-        className={styles.hidden}
-        aria-label="Importer un fichier CSV"
-      />
-      <button type="button" className={styles.button} onClick={handleClick}>
-        <span className={styles.icon} aria-hidden="true">📂</span>
-        Importer un fichier CSV
-      </button>
-      <p className={styles.hint}>
-        Format attendu : colonnes Tâche, Categorie, Type, Release
-      </p>
-    </div>
+    <FileUpload
+      id="csv-upload"
+      label="Import de données"
+      accept=".csv"
+      buttonLabel="Importer un fichier CSV"
+      assistiveTextLabel="Format attendu : colonnes Tâche, Categorie, Type, Release"
+      onChange={handleChange}
+    />
   );
 }

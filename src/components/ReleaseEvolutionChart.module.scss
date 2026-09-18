@@ -1,63 +1,48 @@
-.card {
-  padding: 1.5rem;
-  background: var(--color-surface);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
-}
-
-.title {
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 600;
-}
-
-.subtitle {
-  margin: 0.375rem 0 1rem;
-  font-size: 0.8125rem;
-  color: var(--color-muted);
-}
-
-.legend {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1rem;
-  margin-bottom: 1rem;
-}
-
-.legendItem {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.375rem;
-  font-size: 0.8125rem;
-  color: var(--color-muted);
-}
-
-.dot {
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-}
+@use '../styles/ds-spacing' as spacing;
 
 .chartWrapper {
   overflow-x: auto;
+  margin-top: spacing.$positive-spacing_200;
 }
 
 .chart {
+  display: block;
   width: 100%;
   min-width: 600px;
   height: auto;
 }
 
+.xAxis {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  width: 100%;
+  min-width: 600px;
+  margin-top: spacing.$positive-spacing_050;
+  box-sizing: border-box;
+}
+
+.xAxisSingle {
+  justify-content: center;
+}
+
+.axisTickLabel {
+  font-size: 11px;
+  color: var(--content-tertiary);
+  line-height: 1;
+  cursor: default;
+}
+
 .gridLine {
-  stroke: var(--color-border);
+  stroke: var(--border-tertiary);
   stroke-width: 1;
 }
 
 .axisLabel {
-  fill: var(--color-muted);
+  fill: var(--content-tertiary);
   font-size: 11px;
 }
 
 .line {
-  transition: opacity 0.15s ease;
+  vector-effect: non-scaling-stroke;
 }

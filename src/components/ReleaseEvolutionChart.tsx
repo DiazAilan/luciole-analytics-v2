@@ -1,8 +1,19 @@
+import { Tooltip } from '@design-system-rte/react';
 import type { AnalyticsData } from '../types';
-import { MAIN_CATEGORIES_ORDER } from '../constants/categories';
+import { MAIN_CATEGORIES_ORDER, getMainCategoryColor } from '../constants/categories';
+import { ChartCard } from './charts/ChartCard';
+import { ChartLegend } from './charts/ChartLegend';
 import styles from './ReleaseEvolutionChart.module.scss';
 
-const CATEGORY_COLORS = ['#4a90d9', '#e06c4a', '#2ecc71', '#9b59b6'];
+function formatAxisDate(releaseLabel: string, releaseIso: string): string {
+  const labelMatch = releaseLabel.match(/^(\d{2}-\d{2})-\d{4}$/);
+  if (labelMatch) return labelMatch[1];
+
+  const isoMatch = releaseIso.match(/^\d{4}-(\d{2})-(\d{2})$/);
+  if (isoMatch) return `${isoMatch[1]}-${isoMatch[2]}`;
+
+  return releaseLabel;
+}
 
 export function ReleaseEvolutionChart({ data }: { data: AnalyticsData }) {
   const mainCategories = MAIN_CATEGORIES_ORDER.filter((cat) =>
@@ -12,9 +23,11 @@ export function ReleaseEvolutionChart({ data }: { data: AnalyticsData }) {
   const releaseStats = data.releaseStats;
   if (releaseStats.length === 0) return null;
 
-  const padding = { top: 20, right: 20, bottom: 40, left: 40 };
+  const padding = { top: 20, right: 20, bottom: 12, left: 40 };
   const width = 800;
-  const height = 280;
+  const height = 260;
+  const xAxisPaddingLeft = `${(padding.left / width) * 100}%`;
+  const xAxisPaddingRight = `${(padding.right / width) * 100}%`;
   const chartWidth = width - padding.left - padding.right;
   const chartHeight = height - padding.top - padding.bottom;
 
@@ -39,20 +52,17 @@ export function ReleaseEvolutionChart({ data }: { data: AnalyticsData }) {
 
   const yTicks = Array.from({ length: Math.floor(yMax / 5) + 1 }, (_, i) => i * 5);
 
+  const legendItems = mainCategories.map((cat) => ({
+    name: cat,
+    color: getMainCategoryColor(cat),
+  }));
+
   return (
-    <section className={styles.card}>
-      <h2 className={styles.title}>Évolution par release</h2>
-      <p className={styles.subtitle}>
-        Composant, Devops / Architecture, MCO et Documentation
-      </p>
-      <div className={styles.legend}>
-        {mainCategories.map((cat, i) => (
-          <span key={cat} className={styles.legendItem}>
-            <span className={styles.dot} style={{ background: CATEGORY_COLORS[i] }} />
-            {cat}
-          </span>
-        ))}
-      </div>
+    <ChartCard
+      title="Évolution par release"
+      subtitle="Composant, Devops / Architecture, MCO et Documentation"
+    >
+      <ChartLegend items={legendItems} layout="inline" />
       <div className={styles.chartWrapper}>
         <svg viewBox={`0 0 ${width} ${height}`} className={styles.chart} role="img" aria-label="Évolution par release">
           <g transform={`translate(${padding.left}, ${padding.top})`}>
@@ -70,23 +80,12 @@ export function ReleaseEvolutionChart({ data }: { data: AnalyticsData }) {
                 </text>
               </g>
             ))}
-            {releaseStats.map((r, i) => (
-              <text
-                key={r.release}
-                x={(i / Math.max(releaseStats.length - 1, 1)) * chartWidth}
-                y={chartHeight + 24}
-                className={styles.axisLabel}
-                textAnchor="middle"
-              >
-                {r.releaseLabel}
-              </text>
-            ))}
-            {mainCategories.map((cat, i) => (
+            {mainCategories.map((cat) => (
               <path
                 key={cat}
                 d={linePath((r) => r.categories[cat] ?? 0)}
                 fill="none"
-                stroke={CATEGORY_COLORS[i]}
+                stroke={getMainCategoryColor(cat)}
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
@@ -95,7 +94,22 @@ export function ReleaseEvolutionChart({ data }: { data: AnalyticsData }) {
             ))}
           </g>
         </svg>
+        <div
+          className={`${styles.xAxis} ${releaseStats.length === 1 ? styles.xAxisSingle : ''}`}
+          style={{
+            paddingLeft: xAxisPaddingLeft,
+            paddingRight: xAxisPaddingRight,
+          }}
+        >
+          {releaseStats.map((r) => (
+            <Tooltip key={r.release} label={r.releaseLabel} position="bottom">
+              <span className={styles.axisTickLabel}>
+                {formatAxisDate(r.releaseLabel, r.release)}
+              </span>
+            </Tooltip>
+          ))}
+        </div>
       </div>
-    </section>
+    </ChartCard>
   );
 }
