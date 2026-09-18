@@ -1,18 +1,33 @@
+@use '../styles/ds-spacing' as spacing;
+
 .reports {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: spacing.$positive-spacing_400;
   width: 100%;
-  max-width: 1200px;
-  margin: 0 auto;
+
+  // Luciole Grid adds horizontal padding; flush grids so rows align with full-width cards below.
+  :global(.rte-grid) {
+    width: 100%;
+    padding: spacing.$positive-spacing_0;
+    margin: spacing.$positive-spacing_0;
+  }
 }
 
-.pieRow {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 1.5rem;
+.grid {
+  width: 100%;
+}
 
-  @media (max-width: 800px) {
-    grid-template-columns: 1fr;
+.col {
+  display: flex;
+  width: 100%;
+
+  > * {
+    flex: 1;
+    width: 100%;
   }
+}
+
+.section {
+  width: 100%;
 }

@@ -1,0 +1,38 @@
+@use '../../styles/ds-spacing' as spacing;
+
+.wrapper {
+  width: 100%;
+  padding: spacing.$positive-spacing_200;
+}
+
+.header {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$positive-spacing_200;
+  margin-bottom: spacing.$positive-spacing_250;
+}
+
+.titleBlock {
+  width: 100%;
+}
+
+.title {
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--content-primary);
+}
+
+.subtitle {
+  margin: spacing.$positive-spacing_075 spacing.$positive-spacing_0 spacing.$positive-spacing_0;
+  font-size: 0.875rem;
+  color: var(--content-tertiary);
+}
+
+.action {
+  width: 100%;
+}
+
+.content {
+  width: 100%;
+}

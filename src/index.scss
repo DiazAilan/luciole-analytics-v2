@@ -1,13 +1,33 @@
-:root {
-  --color-bg: #0f1419;
-  --color-bg-alt: #1a2332;
-  --color-surface: #1e2a3a;
-  --color-border: #2d3a4d;
-  --color-text: #e6edf3;
-  --color-muted: #8b949e;
-  --color-accent: #0070d2;
-  --radius-sm: 6px;
-  --radius-md: 10px;
+@font-face {
+  font-display: swap;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 300;
+  src: url('@design-system-rte/core/assets/fonts/nunito-light-300.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 400;
+  src: url('@design-system-rte/core/assets/fonts/nunito-regular-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 600;
+  src: url('@design-system-rte/core/assets/fonts/nunito-semi-bold-600.woff2') format('woff2');
+}
+
+@font-face {
+  font-display: swap;
+  font-family: 'Nunito';
+  font-style: normal;
+  font-weight: 700;
+  src: url('@design-system-rte/core/assets/fonts/nunito-bold-700.woff2') format('woff2');
 }
 
 * {
@@ -16,15 +36,15 @@
 
 body {
   margin: 0;
-  font-family: 'Segoe UI', 'SF Pro Display', -apple-system, BlinkMacSystemFont,
-    sans-serif;
-  line-height: 1.5;
-  color: var(--color-text);
-  background: var(--color-bg);
+  min-height: 100vh;
+  font-family: 'Nunito', sans-serif;
+  background: var(--background-default);
+  color: var(--content-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 #root {
   min-height: 100vh;
+  font-family: inherit;
 }

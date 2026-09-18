@@ -1,52 +1,44 @@
+@use './styles/ds-spacing' as spacing;
+
 .app {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
 }
 
-.header {
-  padding: 2rem 1.5rem;
-  text-align: center;
-  background: linear-gradient(135deg, var(--color-surface) 0%, var(--color-bg-alt) 100%);
-  border-bottom: 1px solid var(--color-border);
-}
-
-.header h1 {
-  margin: 0;
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: var(--color-text);
-}
-
-.subtitle {
-  margin: 0.5rem 0 0;
-  font-size: 0.9375rem;
-  color: var(--color-muted);
-}
-
 .main {
   flex: 1;
-  padding: 2rem 1.5rem;
+  padding: spacing.$positive-spacing_400 spacing.$positive-spacing_300;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 1.5rem;
-}
-
-.error {
-  padding: 1rem 1.25rem;
-  background: rgba(220, 53, 69, 0.12);
-  color: #dc3545;
-  border-radius: var(--radius-md);
-  font-size: 0.9375rem;
-}
-
-.warning {
-  padding: 0.875rem 1.25rem;
-  background: rgba(255, 193, 7, 0.12);
-  color: #ffc107;
-  border-radius: var(--radius-md);
-  font-size: 0.875rem;
-  max-width: 720px;
+  gap: spacing.$positive-spacing_300;
+  max-width: 1200px;
   width: 100%;
+  margin: 0 auto;
+}
+
+.feedback {
+  width: 100%;
+  max-width: 720px;
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$positive-spacing_150;
+}
+
+.headerTitle {
+  display: flex;
+  flex-direction: column;
+  gap: spacing.$positive-spacing_025;
+}
+
+.headerAppName {
+  font-size: 1.125rem;
+  font-weight: 600;
+  color: var(--content-brand-navigation-default);
+}
+
+.headerSubtitle {
+  font-size: 0.875rem;
+  color: var(--content-brand-navigation-hover);
 }

@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Banner, Header, Toast } from '@design-system-rte/react';
 import type { TaskRow } from './types';
 import { FileInput } from './components/FileInput';
 import { AnalyticsReports } from './components/AnalyticsReports';
@@ -13,41 +14,57 @@ function App() {
 
   return (
     <div className={styles.app}>
-      <header className={styles.header}>
-        <h1>GOPro Tickets Résolus</h1>
-        <p className={styles.subtitle}>Analytics &amp; Rapports</p>
-      </header>
+      <Header
+        appearance="brand"
+        hasSearchbar={false}
+        hasAvatar={false}
+        hasRightSection={false}
+        leftSectionContent={
+          <div className={styles.headerTitle}>
+            <span className={styles.headerAppName}>Évaluation Charge Technique Luciole</span>
+            <span className={styles.headerSubtitle}>Analytics &amp; Rapports</span>
+          </div>
+        }
+      />
 
       <main className={styles.main}>
-        <FileInput
-          onLoad={(data, info) => {
-            setTasks(data);
-            setError('');
-            if (info.skippedRows > 0) {
-              const detail = info.warnings.length > 0
-                ? ` (${info.warnings.slice(0, 3).join('; ')}${info.warnings.length > 3 ? '…' : ''})`
-                : '';
-              setWarning(`${info.skippedRows} ticket(s) ignoré(s)${detail}`);
-            } else {
+        {!analytics && (
+          <FileInput
+            onLoad={(data, info) => {
+              setTasks(data);
+              setError('');
+              if (info.skippedRows > 0) {
+                const detail = info.warnings.length > 0
+                  ? ` (${info.warnings.slice(0, 3).join('; ')}${info.warnings.length > 3 ? '…' : ''})`
+                  : '';
+                setWarning(`${info.skippedRows} ticket(s) ignoré(s)${detail}`);
+              } else {
+                setWarning('');
+              }
+            }}
+            onError={(message) => {
+              setError(message);
               setWarning('');
-            }
-          }}
-          onError={(message) => {
-            setError(message);
-            setWarning('');
-          }}
-        />
+            }}
+          />
+        )}
 
         {error && (
-          <div className={styles.error} role="alert">
-            {error}
+          <div className={styles.feedback}>
+            <Banner type="error" message={error} position="push" />
           </div>
         )}
 
         {warning && (
-          <div className={styles.warning} role="status">
-            {warning}
-          </div>
+          <Toast
+            key={warning}
+            type="info"
+            message={warning}
+            isOpen
+            closable
+            showActionButton={false}
+            onClose={() => setWarning('')}
+          />
         )}
 
         {analytics && <AnalyticsReports data={analytics} />}
