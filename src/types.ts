@@ -22,6 +22,8 @@ export interface CategoryStats {
 export interface AnalyticsData {
   tasks: TaskRow[];
   totalTasks: number;
+  userAnomalyTasks: number;
+  userEvolutionTasks: number;
   releaseStats: ReleaseStats[];
   categoryStats: CategoryStats[];
   uniqueTasks: number;

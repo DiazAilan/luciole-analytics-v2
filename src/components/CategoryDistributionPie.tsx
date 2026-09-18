@@ -1,9 +1,7 @@
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import { DateRangePicker } from '@design-system-rte/react';
 import type { AnalyticsData } from '../types';
-import { CHARGE_DISTRIBUTION_START } from '../constants/dateDefaults';
 import { getCategoryColor } from '../constants/categories';
-import { filterTasksByReleaseRange, isoToDate, today } from '../utils/dateRange';
 import { ChartCard } from './charts/ChartCard';
 import { ChartLegend } from './charts/ChartLegend';
 import styles from './CategoryDistributionPie.module.scss';
@@ -20,31 +18,22 @@ function aggregateCategories(tasks: AnalyticsData['tasks']) {
     .sort((a, b) => b.count - a.count);
 }
 
-export function CategoryDistributionPie({ data }: { data: AnalyticsData }) {
-  const defaultRange = useMemo((): [Date, Date] => {
-    const end = today();
-    const start = CHARGE_DISTRIBUTION_START;
-    return [start, end < start ? start : end];
-  }, []);
+interface CategoryDistributionPieProps {
+  data: AnalyticsData;
+  dateRange: [Date | null, Date | null];
+  onDateRangeChange: (range: DateRangeValue) => void;
+  pickerBounds: [Date, Date];
+}
 
-  const pickerBounds = useMemo((): [Date, Date] => {
-    const dataMin = isoToDate(data.releaseRange.min);
-    const end = today();
-    const min = dataMin < CHARGE_DISTRIBUTION_START ? dataMin : CHARGE_DISTRIBUTION_START;
-    return [min, end];
-  }, [data.releaseRange.min]);
-
-  const [dateRange, setDateRange] = useState<DateRangeValue>(null);
-  const activeRange = dateRange ?? defaultRange;
-
-  const filteredTasks = useMemo(
-    () => filterTasksByReleaseRange(data.tasks, activeRange),
-    [data.tasks, activeRange],
-  );
-
+export function CategoryDistributionPie({
+  data,
+  dateRange,
+  onDateRangeChange,
+  pickerBounds,
+}: CategoryDistributionPieProps) {
   const categoryStats = useMemo(
-    () => aggregateCategories(filteredTasks).slice(0, 6),
-    [filteredTasks],
+    () => aggregateCategories(data.tasks).slice(0, 6),
+    [data.tasks],
   );
 
   const total = categoryStats.reduce((sum, stat) => sum + stat.count, 0);
@@ -63,8 +52,6 @@ export function CategoryDistributionPie({ data }: { data: AnalyticsData }) {
     })
     .join(', ');
 
-  if (data.totalTasks === 0) return null;
-
   return (
     <ChartCard
       title="Répartition de la charge"
@@ -72,8 +59,8 @@ export function CategoryDistributionPie({ data }: { data: AnalyticsData }) {
         <DateRangePicker
           id="charge-date-range"
           label="Période"
-          value={activeRange}
-          onChange={setDateRange}
+          value={dateRange}
+          onChange={onDateRangeChange}
           minDate={pickerBounds[0]}
           maxDate={pickerBounds[1]}
           width="100%"

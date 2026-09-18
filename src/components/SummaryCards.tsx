@@ -23,25 +23,20 @@ function StatCard({ value, label }: { value: string | number; label: string }) {
 }
 
 export function SummaryCards({ data }: SummaryCardsProps) {
-  const avgPerRelease =
-    data.releaseStats.length > 0
-      ? Math.round(data.totalTasks / data.releaseStats.length)
-      : 0;
-
   const minLabel = formatReleaseLabel(data.releaseRange.min, data.releaseStats);
   const maxLabel = formatReleaseLabel(data.releaseRange.max, data.releaseStats);
 
   const stats = [
-    { value: data.totalTasks, label: 'Tâches totales' },
-    { value: data.releaseStats.length, label: 'Releases' },
-    { value: avgPerRelease, label: 'Moy. par release' },
-    { value: `${minLabel} – ${maxLabel}`, label: 'Période releases', size: {l: 3} },
+    { value: data.totalTasks, label: 'Tâches totales', l: 3 },
+    { value: data.userAnomalyTasks, label: 'Tickets anomalie users', l: 3 },
+    { value: data.releaseStats.length, label: 'Releases', l: 3 },
+    { value: `${minLabel} – ${maxLabel}`, label: 'Période releases', l: 3 },
   ];
 
   return (
     <Grid gridType="fluid">
       {stats.map((stat) => (
-        <Grid.Col key={stat.label} xxs={12} xs={6} m={4} l={stat.size?.l ?? 3} className={styles.col}>
+        <Grid.Col key={stat.label} xxs={12} xs={6} m={4} l={stat.l} className={styles.col}>
           <StatCard value={stat.value} label={stat.label} />
         </Grid.Col>
       ))}

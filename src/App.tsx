@@ -67,7 +67,12 @@ function App() {
           />
         )}
 
-        {analytics && <AnalyticsReports data={analytics} />}
+        {analytics && (
+          <AnalyticsReports
+            key={`${analytics.releaseRange.min}-${analytics.releaseRange.max}-${analytics.totalTasks}`}
+            data={analytics}
+          />
+        )}
       </main>
     </div>
   );
