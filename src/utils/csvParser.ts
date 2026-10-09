@@ -1,4 +1,5 @@
 import Papa from 'papaparse';
+import { mapCategoryFromCsv } from '../constants/categories';
 import type { ParseResult, TaskRow } from '../types';
 
 const TASK_PATTERN = /^DSR-\d+/;
@@ -68,7 +69,8 @@ export function parseCSV(content: string): ParseResult {
     if (!row || row.length === 0) continue;
 
     const task = (taskIdx >= 0 ? row[taskIdx] : row[0])?.trim() || '';
-    const category = (catIdx >= 0 ? row[catIdx] : row[1])?.trim() || '';
+    const categoryRaw = (catIdx >= 0 ? row[catIdx] : row[1])?.trim() || '';
+    const category = categoryRaw ? mapCategoryFromCsv(categoryRaw) : '';
     const type = (typeIdx >= 0 ? row[typeIdx] : row[2])?.trim() || '';
     const releaseVal = (releaseIdx >= 0 ? row[releaseIdx] : row[3])?.trim() || '';
 

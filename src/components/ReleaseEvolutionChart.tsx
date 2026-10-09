@@ -60,7 +60,7 @@ export function ReleaseEvolutionChart({ data }: { data: AnalyticsData }) {
   return (
     <ChartCard
       title="Évolution par release"
-      subtitle="Composant, Devops / Architecture, MCO et Documentation"
+      subtitle={MAIN_CATEGORIES_ORDER.join(', ')}
     >
       <ChartLegend items={legendItems} layout="inline" />
       <div className={styles.chartWrapper}>

@@ -36,7 +36,7 @@ export function ReleaseDistributionTable({ data }: { data: AnalyticsData }) {
   }));
 
   return (
-    <ChartCard title="Charge par release — Composant, Devops / Architecture, MCO et Documentation">
+    <ChartCard title={`Charge par release — ${MAIN_CATEGORIES_ORDER.join(', ')}`}>
       <ChartLegend items={legendItems} layout="inline" />
       <div className={styles.tableWrapper}>
         <table className={styles.table}>

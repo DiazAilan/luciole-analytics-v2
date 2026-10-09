@@ -1,7 +1,19 @@
+/** Category labels as they appear in CSV exports (unchanged in source files). */
+const CSV_CATEGORY_ALIASES: Record<string, string> = {
+  Composant: 'Nouveaux composants + évolutions',
+  MCO: 'Correctifs',
+};
+
+/** Maps a raw CSV category value to the display label used in the app. */
+export function mapCategoryFromCsv(rawCategory: string): string {
+  const trimmed = rawCategory.trim();
+  return CSV_CATEGORY_ALIASES[trimmed] ?? trimmed;
+}
+
 export const MAIN_CATEGORIES_ORDER = [
-  'Composant',
+  'Nouveaux composants + évolutions',
   'Devops / Architecture',
-  'MCO',
+  'Correctifs',
   'Documentation',
 ] as const;
 
@@ -18,9 +30,9 @@ export const CHART_CATEGORY_TOKENS = [
 ] as const;
 
 export const CATEGORY_COLORS: Record<string, string> = {
-  Composant: CHART_CATEGORY_TOKENS[0],
+  'Nouveaux composants + évolutions': CHART_CATEGORY_TOKENS[0],
   'Devops / Architecture': CHART_CATEGORY_TOKENS[1],
-  MCO: CHART_CATEGORY_TOKENS[2],
+  Correctifs: CHART_CATEGORY_TOKENS[2],
   Documentation: CHART_CATEGORY_TOKENS[3],
 };
 
